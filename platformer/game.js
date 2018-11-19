@@ -6,8 +6,8 @@ new Phaser.Game({
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 1200,},
-            debug: true
+            gravity: { y: 1200, },
+            debug: false
         },
     },
     scene: {
@@ -20,6 +20,7 @@ new Phaser.Game({
             player = this.physics.add.sprite(150, 150, 'hi')
             player.setCollideWorldBounds(true)
             player.setBounce(.2)  // 0 to 1
+            player.setDragX(900)
         
             curs = this.input.keyboard.createCursorKeys()
         },
@@ -28,13 +29,16 @@ new Phaser.Game({
 
             if (curs.left.isDown) {
                 player.setVelocityX(-200)
-               }   else if (curs.right.isDown) {
-                    player.setVelocityX(200)
-                }
+            } else if (curs.right.isDown) {
+                player.setVelocityX(200)
             }
+
+            if (curs.space.isDown || curs.up.isDown) {
+            player.setVelocityY(-600)
+            }  
 
         
         }
 
     }
-) 
+})
