@@ -14,18 +14,21 @@ new Phaser.Game({
         preload: function () {
             this.load.image('bg', './assets/plat-background.png')
             this.load.image('hi', './assets/app-person.png')
+            
         },
         create() {
             this.add.image(0, 0, 'bg').setOrigin(0,0)
             player = this.physics.add.sprite(150, 150, 'hi')
             player.setCollideWorldBounds(true)
             player.setBounce(.2)  // 0 to 1
-            player.setDragX(900)
+            player.setDragX(1300)
+        
         
             curs = this.input.keyboard.createCursorKeys()
         },
         
         update() {
+            player.setDragX(900)
 
             if (curs.left.isDown) {
                 player.setVelocityX(-200)
@@ -33,9 +36,24 @@ new Phaser.Game({
                 player.setVelocityX(200)
             }
 
+            if (! player.body.onFloor()) return
+
+            if (player.body.onFloor()) {
+                player.setDragX(1100)
+                if (curs.space.isDown || curs.up.isDown) {
+                    player.setVelocityY(-600)
+                }
+            } else {
+                player.setDragX(0)
+            }
+
+            player.setDragX(900)
+            
             if (curs.space.isDown || curs.up.isDown) {
             player.setVelocityY(-600)
             }  
+
+
 
         
         }
