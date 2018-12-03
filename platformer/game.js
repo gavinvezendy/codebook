@@ -1,62 +1,59 @@
-let player, curs
+const keys = 'W,A,S,D,SPACE,LEFT,RIGHT,UP,DOWN'
 
-new Phaser.Game({
-    width: 683, // half of 1386
-    height: 384, // half of 786
+let pl, k, plats
+
+function preload() {
+    this.load.image('bg', './assets/plat-background.png')
+    this.load.image('hi', './assets/app-person.png')
+}
+
+function create() {
+    this.add.image(0, 0, 'bg').setOrigin(0,0)
+    
+    pl = this.physics.add.sprite(150, 150, 'hi')
+    pl.setCollideWorldBounds(true)
+    pl.setScale(5.5)
+    pl.setBounce(.2)  // 0 to 1
+    pl.setDragX(1300)
+
+    k = this.input.keyboard.addKeys(keys)
+}
+    
+function update() {
+  
+    if (k.LEFT.isDown || k.A.isDown) {
+        pl.setVelocityX(-400)
+    } else if (k.RIGHT.isDown || k.D.isDown) {
+        pl.setVelocityX(400)
+    }
+
+    if (pl.body.onFloor()) {
+        
+        if (k.UP.isDown || k.W.isDown) {
+            pl.setVelocityY(-400)
+        }
+        
+    }
+
+   
+    }
+
+
+ 
+
+let config = {
+    width: 683,
+    height: 384,
+    pixelArt: true,
+    scene: {preload, create, update},
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 1200, },
             debug: false
+        
         },
     },
-    scene: {
-        preload: function () {
-            this.load.image('bg', './assets/plat-background.png')
-            this.load.image('hi', './assets/app-person.png')
-            
-        },
-        create() {
-            this.add.image(0, 0, 'bg').setOrigin(0,0)
-            player = this.physics.add.sprite(150, 150, 'hi')
-            player.setCollideWorldBounds(true)
-            player.setBounce(.2)  // 0 to 1
-            player.setDragX(1300)
-        
-        
-            curs = this.input.keyboard.createCursorKeys()
-        },
-        
-        update() {
-            player.setDragX(900)
+}
 
-            if (curs.left.isDown) {
-                player.setVelocityX(-200)
-            } else if (curs.right.isDown) {
-                player.setVelocityX(200)
-            }
-
-            if (! player.body.onFloor()) return
-
-            if (player.body.onFloor()) {
-                player.setDragX(1100)
-                if (curs.space.isDown || curs.up.isDown) {
-                    player.setVelocityY(-600)
-                }
-            } else {
-                player.setDragX(0)
-            }
-
-            player.setDragX(900)
-            
-            if (curs.space.isDown || curs.up.isDown) {
-            player.setVelocityY(-600)
-            }  
-
-
-
-        
-        }
-
-    }
-})
+new Phaser.Game(config)
